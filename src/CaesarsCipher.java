@@ -7,6 +7,10 @@ public class CaesarsCipher {
             'ъ', 'ы', 'ь', 'э', 'я', '.', ',', '«', '»', '"', '\'', ':', '!', '?', ' '};
     private static int alphabetLength = ALPHABET.length;
 
+    public static char[] getAlphabet() {
+        return Arrays.copyOf(ALPHABET, alphabetLength);
+    }
+
     public String encrypt(String text, int shift) {
         if (shift >= alphabetLength) {
             shift = shift % alphabetLength;
