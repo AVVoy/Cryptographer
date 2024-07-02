@@ -26,7 +26,10 @@ public class CaesarsCipher {
             } else {
                 int index = getIndexOfChInALPHABET(ch) + shift;
                 if (index >= alphabetLength) {
-                    index = index % alphabetLength;
+                    index -= alphabetLength;
+                }
+                if (index < 0) {
+                    index += alphabetLength;
                 }
                 out.append(ALPHABET[index]);
             }
