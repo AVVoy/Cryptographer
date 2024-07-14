@@ -9,6 +9,7 @@ public class Main {
                 Util.getResultWorkingApp(userSelection);
             }
         } while (!userSelection.equals("exit"));
+
         Util.writeMessage("\n !ценоК");
 
     }

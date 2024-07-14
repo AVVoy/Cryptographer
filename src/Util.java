@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Util {
     private static final Validator validator = new Validator();
     private static final FileManager fileManager = new FileManager();
+    private static final BruteForce bruteForce = new BruteForce();
 
     private static final CaesarsCipher caesar = new CaesarsCipher();
 
@@ -47,7 +48,8 @@ public class Util {
         switch (userSelection) {
             case "1" -> encryptFile();
             case "2" -> decryptFile();
-            case "3", "4" -> writeMessage("Находится в разработке. Попробуйте связаться с разработчиком)");
+            case "3" -> bruteForceFile();
+            case "4" -> writeMessage("Находится в разработке. Попробуйте связаться с разработчиком)");
             default -> {
                 writeMessage("Введен некорректный режим работы.\nДавайте попробуем еще раз.");
                 writeEmptyLine();
@@ -80,32 +82,6 @@ public class Util {
 
     }
 
-    private static String getPathToFile() {
-        String filePath;
-        while (true) {
-            filePath = readMessage();
-            if (!filePath.isEmpty() && validator.isFileExists(filePath)) {
-                return filePath;
-            } else {
-                writeMessage("Введен некорректный путь к файлу.\nПроверьте путь к файлу и попробуйте еше раз.");
-                writeEmptyLine();
-            }
-        }
-    }
-
-    private static int getShiftAlphabet() {
-        int shift = Integer.MAX_VALUE;
-
-        while (!validator.isValidKey(shift, CaesarsCipher.getAlphabet())) {
-            int lengthAlphabet = CaesarsCipher.getAlphabet().length;
-            writeMessage("Введите сдвиг алфавита. Он должен быть от -" +
-                    lengthAlphabet + " до " + lengthAlphabet
-            );
-            shift = readInt();
-        }
-        return shift;
-    }
-
     private static void decryptFile() {
 
         writeMessage("Введите путь к файлу, который будем дешифровать");
@@ -130,5 +106,54 @@ public class Util {
         writeEmptyLine();
 
 
+    }
+
+    private static void bruteForceFile() {
+        writeMessage("Введите путь к файлу, который будем взламывать");
+        String inputPathToFile = getPathToFile();
+
+        String unencryptedTextFromInputFile = fileManager.readFile(inputPathToFile);
+         String out =
+        bruteForce.decryptByBruteForce(unencryptedTextFromInputFile, CaesarsCipher.getAlphabet());
+
+
+        writeMessage("Введите путь к файлу, куда сохраним дешифровку");
+        String outputPathToFile = readMessage();
+
+        fileManager.writeFile(
+                out, outputPathToFile);
+
+        writeMessage("Взломали содержимое файла, лежащего по пути "
+                + inputPathToFile
+                + " и записали в файл, лежащий по пути "
+                + outputPathToFile
+        );
+        writeEmptyLine();
+    }
+
+    private static String getPathToFile() {
+        String filePath;
+        while (true) {
+            filePath = readMessage();
+            if (!filePath.isEmpty() && validator.isFileExists(filePath)) {
+                return filePath;
+            } else {
+                writeMessage("Введен некорректный путь к файлу.\nПроверьте путь к файлу и попробуйте еше раз.");
+                writeEmptyLine();
+            }
+        }
+    }
+
+    private static int getShiftAlphabet() {
+        int shift = Integer.MAX_VALUE;
+
+        while (!validator.isValidKey(shift, CaesarsCipher.getAlphabet())) {
+            int lengthAlphabet = CaesarsCipher.getAlphabet().length;
+            writeMessage("Введите сдвиг алфавита. Он должен быть от -" +
+                    lengthAlphabet + " до " + lengthAlphabet
+            );
+            shift = readInt();
+        }
+        return shift;
     }
 }
