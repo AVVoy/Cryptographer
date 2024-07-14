@@ -4,11 +4,7 @@ import java.nio.file.Path;
 public class Validator {
 
     public boolean isValidKey(int key, char[] alphabet) {
-        if ((key > 0  && key< alphabet.length) ||
-                (key > -alphabet.length && key < 0)) {
-            return true;
-        }
-        return false;
+        return key > -alphabet.length && key < alphabet.length;
     }
 
     public boolean isFileExists(String filePath) {

@@ -12,10 +12,8 @@ public class FileManager {
                 out.append(bf.readLine());
                 out.append("\n");
             }
-        } catch (FileNotFoundException e) {
-            ConsoleHelper.writeMessage("Упс... что-то пошло не так. нет такого файла");
-        } catch (IOException e) {
-            ConsoleHelper.writeMessage("Упс... что-то пошло не так. не могу прочитать файл");
+        } catch (IOException ignored) {
+            //Считаем что в метод приходит корректный путь к файлу
         }
         return out.toString();
     }
@@ -27,7 +25,7 @@ public class FileManager {
             bw.write(content);
             bw.flush();
         } catch (IOException e) {
-            ConsoleHelper.writeMessage("Упс... что-то пошло не так. не могу записать файл");
+            Util.writeMessage("Упс... Не могу записать файл");
         }
     }
 }
