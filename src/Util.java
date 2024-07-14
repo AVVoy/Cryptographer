@@ -5,6 +5,8 @@ public class Util {
     private static final FileManager fileManager = new FileManager();
     private static final BruteForce bruteForce = new BruteForce();
 
+    private static final StatisticalAnalyzer statisticalAnalyzer = new StatisticalAnalyzer();
+
     private static final CaesarsCipher caesar = new CaesarsCipher();
 
     public static void showMenu() {
@@ -49,7 +51,7 @@ public class Util {
             case "1" -> encryptFile();
             case "2" -> decryptFile();
             case "3" -> bruteForceFile();
-            case "4" -> writeMessage("Находится в разработке. Попробуйте связаться с разработчиком)");
+            case "4" -> statisticAnalyzerFile();
             default -> {
                 writeMessage("Введен некорректный режим работы.\nДавайте попробуем еще раз.");
                 writeEmptyLine();
@@ -87,8 +89,7 @@ public class Util {
         writeMessage("Введите путь к файлу, который будем дешифровать");
         String inputPathToFile = getPathToFile();
 
-        String unencryptedTextFromInputFile = fileManager.readFile(inputPathToFile);
-
+        String encryptedTextFromInputFile = fileManager.readFile(inputPathToFile);
         int shift = getShiftAlphabet();
 
         writeMessage("Введите путь к файлу, куда сохраним дешифровку");
@@ -96,7 +97,7 @@ public class Util {
 
         fileManager.writeFile(
                 caesar.
-                        decrypt(unencryptedTextFromInputFile, shift), outputPathToFile);
+                        decrypt(encryptedTextFromInputFile, shift), outputPathToFile);
 
         writeMessage("Расшифровали содержимое файла, лежащего по пути "
                 + inputPathToFile
@@ -128,6 +129,26 @@ public class Util {
                 + " и записали в файл, лежащий по пути "
                 + outputPathToFile
         );
+        writeEmptyLine();
+    }
+
+    private static void statisticAnalyzerFile() {
+        writeMessage("Введите путь к файлу, который будем дешифровать");
+        String inputPathToFile = getPathToFile();
+
+        String encryptedTextFromInputFile = fileManager.readFile(inputPathToFile);
+
+        writeMessage("Введите путь к файлу, который содержит текст для статистики");
+        String inputRepresentativePathToFile = getPathToFile();
+
+        String representativeTextFromInputFile = fileManager.readFile(inputRepresentativePathToFile);
+
+        int mostLikelyShift =
+        statisticalAnalyzer.findMostLikelyShift(encryptedTextFromInputFile,
+                CaesarsCipher.getAlphabet(),
+                representativeTextFromInputFile);
+
+        writeMessage("Наиболее вероятный сдвиг = " + mostLikelyShift);
         writeEmptyLine();
     }
 

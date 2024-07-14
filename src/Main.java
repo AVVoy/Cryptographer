@@ -11,7 +11,6 @@ public class Main {
         } while (!userSelection.equals("exit"));
 
         Util.writeMessage("\n !ценоК");
-
     }
 //D:\example\file1.txt
 
